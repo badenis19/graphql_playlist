@@ -10,7 +10,8 @@ const app = express();
 // route '/graphql' so that express understand we want to interact with Graphql so use graphqlHTTP 
 app.use('/graphql', graphqlHTTP({
     // schema will tell express-graphql about the data (data-types, properties, relationships) & how the graph will look
-    schema: schema // with ES6 could only put schema as the name are the same
+    schema: schema, // with ES6 could only put schema as the name are the same
+    graphiql: true
 })) 
 
 app.listen(4000, () => console.log("Listening for request on port 4000"));
