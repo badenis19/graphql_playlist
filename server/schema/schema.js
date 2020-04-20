@@ -13,17 +13,18 @@ const {
     GraphQLList
     } = graphql; // extracting GraphQLObjectType and other from graphql imported package 
 
-// Defining Object (that we can query) type and data types
+// Defining Object (that we can query) data type and Relatiionship. Describe how data on the Graph will look.
 const BookType = new GraphQLObjectType({
     name: 'Book',
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         genre: { type: GraphQLString },
-        author : { 
+        author: { 
             type: AuthorType,
             resolve(parent,args){
-                // return _.find(authors, {id: parent.authorId})
+                console.log(parent)
+                return Author.findById(parent.authorId) // look in Author collection for ID that matches this ID
             }
         }
     })
@@ -38,7 +39,7 @@ const AuthorType = new GraphQLObjectType({
         books: { // to display the many books an author can have
             type: new GraphQLList(BookType), // Be mindful of type different notation for List
             resolve(parent, args){
-                // return _.filter(books, {authorId: parent.id}) // filtering the books array to only have books with specified authorId
+                return Book.find({authorId: parent.id}) // filtering the books array to only have books with specified authorId
             }
         }
     })
@@ -54,25 +55,27 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent,args){ // acts after receivin query. 'parent' used with relationships | 'args' is the args key just above so 'id'
                 // code to get specific data from DB / other source
                 // return _.find(books, {id: args.id}) // with lodash .find() method 
+                return Book.findById(args.id)
+
             }
         },
         author: {
             type: AuthorType,
             args: { id: {type: GraphQLID}},
             resolve(parent,args){
-                // return _.find(authors, {id: args.id})
+                return Author.findById(args.id)
             }
         },
         books: { // To get all the books
             type: new GraphQLList(BookType),
             resolve(parent,args){
-                // return books // books as in the collection of data
+                return Book.find({}) // when object is empty {} it will return all
             }
         },
         authors: {
             type: new GraphQLList(AuthorType),
             resolve(parent,args){
-                // return authors
+                return Author.find({})
             }
         }
     }
