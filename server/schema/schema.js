@@ -6,14 +6,19 @@ const {
     GraphQLObjectType,
     GraphQLString,
     GraphQLSchema,
-    GraphQLID, GraphQLInt
+    GraphQLID, 
+    GraphQLInt,
+    GraphQLList
     } = graphql; // extracting GraphQLObjectType and other from graphql imported package 
 
 // dummy data TO DELETE LATER WHEN USING MONGODB
 var books = [
     {id: '1', name: 'book1', genre: "comedy", authorId: '1' },
     {id: '2', name: 'book2', genre: "comedy", authorId: '3'},
-    {id: '3', name: 'book3', genre: "thriller", authorId: '2' }
+    {id: '3', name: 'book3', genre: "thriller", authorId: '2' },
+    {id: '4', name: 'book4', genre: "comedy", authorId: '2' },
+    {id: '5', name: 'book5', genre: "comedy", authorId: '3'},
+    {id: '6', name: 'book36', genre: "thriller", authorId: '3' }
 ];
 
 var authors = [
@@ -32,7 +37,7 @@ const BookType = new GraphQLObjectType({
         author : { 
             type: AuthorType,
             resolve(parent,args){
-                console.log(parent);
+                // console.log(parent);
                 return _.find(authors, {id: parent.authorId})
             }
         }
@@ -44,7 +49,14 @@ const AuthorType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLString },
         name: { type: GraphQLString },
-        age: { type: GraphQLInt }
+        age: { type: GraphQLInt },
+        books: { // to display the many books an author can have
+            type: new GraphQLList(BookType), // Be mindful of different notation for List
+            resolve(parent, args){
+                // console.log(parent)
+                return _.filter(books, {authorId: parent.id}) // filtering the books array to only have books with specified authorId
+            }
+        }
     })
 })
 
@@ -52,8 +64,8 @@ const AuthorType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        book: {  // when someone queries this BookType, expects arguments to be passed too (below) to know which book they want to query
-            type: BookType,
+        book: {  // name used to make the query on front-end ( E.g. book(id: 1 ) )
+            type: BookType, // when someone queries this BookType, expects arguments to be passed too (below) to know which book they want to query
             args: { id: {type: GraphQLID}}, // expect the ID to come along with the query (as in Booktype Object)
             resolve(parent,args){ // acts after receivin query. 'parent' used with relationships | 'args' is the args key just above so 'id'
                 // code to get specific data from DB / other source
@@ -64,7 +76,7 @@ const RootQuery = new GraphQLObjectType({
             type: AuthorType,
             args: { id: {type: GraphQLID}},
             resolve(parent,args){
-                return _.find(author, {id: args.id})
+                return _.find(authors, {id: args.id})
             }
         }
     }
