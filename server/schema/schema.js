@@ -7,16 +7,17 @@ const Author = require("../models/author");
 const { 
     GraphQLObjectType,
     GraphQLString,
-    GraphQLSchema,
+    GraphQLSchema, 
     GraphQLID, 
     GraphQLInt,
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull // equivalent to field is required. Cannot be Null
     } = graphql; // extracting GraphQLObjectType and other from graphql imported package 
 
 // Defining Object (that we can query) data type and Relatiionship. Describe how data on the Graph will look.
 const BookType = new GraphQLObjectType({
     name: 'Book',
-    fields: () => ({
+    fields: () => ({ 
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         genre: { type: GraphQLString },
@@ -88,8 +89,8 @@ const Mutation = new GraphQLObjectType({
         addAuthor: {
             type: AuthorType,
             args: { // info needed to create new author
-                name: {type: GraphQLString},
-                age: {type: GraphQLInt}
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                age: {type: new GraphQLNonNull(GraphQLInt)}
             },
             resolve(parent,args){ // takes the argumenst sent with the query by user and make a new instance of author and store in DB
                 let author = new Author({ // Author is the required Author Model
@@ -102,9 +103,9 @@ const Mutation = new GraphQLObjectType({
         addBook: {
             type: BookType,
             args: {
-                name: {type: GraphQLString},
-                genre: {type: GraphQLString},
-                authorId: {type: GraphQLID}
+                name: {type: new GraphQLNonNull(GraphQLString)}, 
+                genre: {type: new GraphQLNonNull(GraphQLString)},
+                authorId: {type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent,args){
                 let book = new Book({
