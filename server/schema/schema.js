@@ -78,10 +78,40 @@ const RootQuery = new GraphQLObjectType({
     }
 })
 
+// Mutation allow to Create, Edit and Delete data
+const Mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        addAuthor: {
+            type: AuthorType,
+            args: { // info needed to create new author
+                name: {type: GraphQLString},
+                age: {type: GraphQLInt}
+            },
+            resolve(parent,args){ // takes the argumenst sent with the query by user and make a new instance of author and store in DB
+                let author = new Author({ // Author is the required Author Model
+                    name: args.name, // info sent alongg by user
+                    age: args.age
+                })
+                return author.save() // to save author after creating it. IMPORTANT to write return for it to save
+            }
+        }
+    }
+})
+
+// AddAuthor query example
+// mutation {
+//     addAuthor(name: "New", age: 45){
+//       name,
+//       age
+//     }
+//   }
+
 
 // Defining which query the user can use when making queries from the front-end
 module.exports = new GraphQLSchema({ // or export default new GraphQLSchema({
-    query: RootQuery 
+    query: RootQuery, // allows make queries using query 
+    mutation: Mutation // allows to perform mutation using mutation 
 })
 
 
