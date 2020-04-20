@@ -37,7 +37,6 @@ const BookType = new GraphQLObjectType({
         author : { 
             type: AuthorType,
             resolve(parent,args){
-                // console.log(parent);
                 return _.find(authors, {id: parent.authorId})
             }
         }
@@ -51,9 +50,8 @@ const AuthorType = new GraphQLObjectType({
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
         books: { // to display the many books an author can have
-            type: new GraphQLList(BookType), // Be mindful of different notation for List
+            type: new GraphQLList(BookType), // Be mindful of type different notation for List
             resolve(parent, args){
-                // console.log(parent)
                 return _.filter(books, {authorId: parent.id}) // filtering the books array to only have books with specified authorId
             }
         }
@@ -78,10 +76,21 @@ const RootQuery = new GraphQLObjectType({
             resolve(parent,args){
                 return _.find(authors, {id: args.id})
             }
+        },
+        books: { // To get all the books
+            type: new GraphQLList(BookType),
+            resolve(parent,args){
+                return books // books as in the collection of data
+            }
+        },
+        authors: {
+            type: new GraphQLList(AuthorType),
+            resolve(parent,args){
+                return authors
+            }
         }
     }
 })
-
 
 
 // Defining which query the user can use when making queries from the front-end
