@@ -4,6 +4,7 @@ import { ApolloProvider } from 'react-apollo'; // helps react to understand Apol
 
 // components
 import BookList from './components/BookList'
+import AddBook from './components/AddBook';
 
 // apollo client setup
 const client = new ApolloClient({
@@ -11,7 +12,6 @@ const client = new ApolloClient({
 })
 
 // Wrapping with AppoloProvider allow to get data from endpoint and inject data between tags.
-
 class App extends Component {
   render(){
     return (
@@ -19,6 +19,7 @@ class App extends Component {
         <div id="main">
           <p>Bruno's Reading List</p>
           <BookList />
+          <AddBook />
         </div>
       </ApolloProvider>
     );

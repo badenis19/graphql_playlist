@@ -14,29 +14,32 @@ const getBooksQuery = gql`
 `;
 
 /* Component */
-
 class BookList extends Component {
+
+  /* Functions */
+  displayBooks = () => { // no need for const/var when defining in component
+    let data = this.props.data; // to access props with result of the query
+    if (data.loading) { // Making a check using the loading property in data to check if the data has been loaded 
+      return (<div>Loading books..</div>)
+    } else {
+      return data.books.map(book => {
+        return (
+          <li key={book.id}>{book.name}</li>
+        )
+      })
+    }
+  }
+
   render() {
-    console.log(this.props)
     return (
       <div>
         <ul id="book-list">
-          <li>Book name</li>
+          {this.displayBooks()}
         </ul>
       </div>
     );
   }
 }
-// function BookList() {
-//   console.log(this.props)
-//   return (
-//     <div>
-//       <ul id="book-list">
-//         <li>Book name</li>
-//       </ul>
-//     </div>
-//   );
-// }
 
 /* Binds the query getBooksQuery with the BookList Component using graphql() function imported.
 BookList Component now has access to the data returned from getBooksQuery query. Stored in the props */
