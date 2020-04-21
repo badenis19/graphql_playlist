@@ -119,15 +119,6 @@ const Mutation = new GraphQLObjectType({
     }
 })
 
-// AddAuthor query example
-// mutation {
-//     addAuthor(name: "New", age: 45){
-//       name,
-//       age
-//     }
-//   }
-
-
 // Defining which query the user can use when making queries from the front-end
 module.exports = new GraphQLSchema({ // or export default new GraphQLSchema({
     query: RootQuery, // allows make queries using query 

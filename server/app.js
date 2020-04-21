@@ -1,10 +1,14 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql'); // variable name not equal to package name just by convention
 const schema = require('./schema/schema');
-const app = express(); // invoke the express function to create our app 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const cors = require('cors');
 require('dotenv/config');
 
+const app = express(); // invoke the express function to create our app 
+
+// allow cross origin request 
+app.use(cors());
 
 // connect to mlab DB
 mongoose.connect(process.env.URI,
