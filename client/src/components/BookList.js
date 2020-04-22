@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
-import { gql } from 'apollo-boost'; // package needed to parse graphql. Now we can create queries.
 import { graphql } from 'react-apollo'; // To bind Apollo with React Component
 
-
 /* Queries */
-const getBooksQuery = gql`
-{
-  books{
-    name
-    id
-  }
-}
-`;
+import { getBooksQuery } from '../queries/queries'
 
 /* Component */
 class BookList extends Component {

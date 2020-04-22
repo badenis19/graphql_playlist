@@ -25,15 +25,4 @@ class App extends Component {
     );
 }}
 
-// function App() {
-//   return (
-//     <ApolloProvider client={client}> 
-//       <div id="main">
-//         <p>Bruno's Reading List</p>
-//         <BookList />
-//       </div>
-//     </ApolloProvider>
-//   );
-// }
-
 export default App;

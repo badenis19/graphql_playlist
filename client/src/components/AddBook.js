@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
 
 /* Queries */
-const getAuthorsQuery = gql`
-{
-  authors{
-    name
-    id
-  }
-}
-`;
+import { getAuthorsQuery } from '../queries/queries'
 
 /* Component */
 class AddBook extends Component {
 
+  constructor(props){
+    super(props);
 
+    this.state = {
+      name: "",
+      genre: "",
+      authorId: ""
+    }
+
+  }
 
   /* Functions */
   displayAuthors = () => {
@@ -31,26 +32,29 @@ class AddBook extends Component {
     }
   }
 
+  submitForm(e){
+    e.preventDefault() // prevent default behavior of event, so prevents Page from resfreshing on form submit
+    console.log(this.state)
+  }
+
   render() {
     return (
-      <form id="add-book">
+      <form id="add-book" onSubmit={this.submitForm.bind(this)}>
         <div className="field">
           <label htmlFor="book-name">Book Name:&nbsp;</label>
-          <input type="text" name="book-name" />
-        </div>
+          <input type="text" onChange={(e) => this.setState({name: e.target.value}) } name="book-name" />
+        </div> 
 
-
-        <div className="field">
+        <div className="field"> 
           <label htmlFor="genre">Genre:&nbsp;</label>
-          <input type="text" name="genre" />
+          <input type="text" onChange={(e) => this.setState({genre: e.target.value}) } name="genre" />
         </div>
-
 
         <div className="field">
           <label htmlFor="author-name">Author:&nbsp;</label>
-          <select name="author-name">
+          <select name="author-name" onChange={(e) => this.setState({authorId: e.target.value}) }>
             <option>Select author</option>
-            {this.displayAuthors()}
+            {this.displayAuthors()} 
           </select>
         </div>
 
