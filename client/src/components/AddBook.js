@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
+import { flowRight as compose } from 'lodash'; //using lodash as compose was removed from react-apollo
 
 /* Queries */
-import { getAuthorsQuery } from '../queries/queries'
+import { getAuthorsQuery, addBookMutation } from '../queries/queries'
 
 /* Component */
 class AddBook extends Component {
@@ -20,21 +21,29 @@ class AddBook extends Component {
 
   /* Functions */
   displayAuthors = () => {
-    let data = this.props.data;
+    let data = this.props.getAuthorsQuery;
+
+    console.log(this.props)
     if (data.loading) {
       return (<option disabled>Loading Authors..</option>)
     } else {
       return data.authors.map(author => {
         return (
           <option key={author.id} value={author.id}>{author.name}</option>
-        )
+        ) 
       })
     }
   }
 
   submitForm(e){
     e.preventDefault() // prevent default behavior of event, so prevents Page from resfreshing on form submit
-    console.log(this.state)
+    this.props.addBookMutation({ // addBookMutation refers to addBookMutation name (key) in the compose function at bottom of the page
+      variables: {
+        name: this.state.name,
+        genre: this.state.genre,
+        authorId: this.state.authorId        
+      }
+    }); // running mutation. To create new record, add new mutation on Form submission
   }
 
   render() {
@@ -64,4 +73,11 @@ class AddBook extends Component {
   }
 }
 
-export default graphql(getAuthorsQuery)(AddBook);
+// To bind single query/mutation to a Component
+// export default graphql(getAuthorsQuery)(AddBook);
+
+// To bind many queries/mutations to a Component and giving them a name to access them in the application. E.g. this.props.addBookMutation();
+export default compose(
+  graphql(getAuthorsQuery, {name: "getAuthorsQuery"}),
+  graphql(addBookMutation, {name: "addBookMutation"})
+)(AddBook);
