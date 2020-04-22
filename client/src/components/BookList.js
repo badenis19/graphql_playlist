@@ -5,7 +5,18 @@ import { graphql } from 'react-apollo'; // To bind Apollo with React Component
 import { getBooksQuery } from '../queries/queries'
 
 /* Component */
+import BookDetails from '../components/BookDetails';
+
+
 class BookList extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selected: null // keeps track of the id of whatever book is clicked on. (null because initial state)
+    }
+  }
 
   /* Functions */
   displayBooks = () => { // no need for const/var when defining in component
@@ -15,7 +26,7 @@ class BookList extends Component {
     } else {
       return data.books.map(book => {
         return (
-          <li key={book.id}>{book.name}</li>
+          <li onClick={(e) => this.setState({ selected: book.id })} key={book.id}>{book.name}</li>
         )
       })
     }
@@ -27,6 +38,7 @@ class BookList extends Component {
         <ul id="book-list">
           {this.displayBooks()}
         </ul>
+        <BookDetails bookId={this.state.selected} />
       </div>
     );
   }

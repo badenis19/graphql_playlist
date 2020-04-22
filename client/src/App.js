@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo'; // helps react to understand Apollo
 
-// components
+/* Component */
 import BookList from './components/BookList'
 import AddBook from './components/AddBook';
 

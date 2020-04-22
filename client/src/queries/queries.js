@@ -1,6 +1,8 @@
 import { gql } from 'apollo-boost'; // package needed to parse graphql. Now we can create queries.
 
 /* Queries */
+
+// Get all
 const getBooksQuery = gql`
 {
   books{
@@ -19,6 +21,26 @@ const getAuthorsQuery = gql`
 }
 `;
 
+// Get single 
+const getBookQuery = gql`
+    query($id:ID){
+        book(id:$id){
+            id
+            name
+            genre
+            author{
+                id
+                name
+                age
+                books{
+                    name
+                    id
+                }
+            }
+        } 
+    }
+`;
+
 /* Mutations */
 
 // Create
@@ -31,4 +53,4 @@ const addBookMutation = gql`
     }
 `;
 
-export { getBooksQuery, getAuthorsQuery, addBookMutation }
+export { getBooksQuery, getAuthorsQuery, addBookMutation, getBookQuery }
