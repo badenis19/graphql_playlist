@@ -17,8 +17,7 @@ mongoose.connect(process.env.URI,
         useUnifiedTopology: true
     },
     () => console.log("connected to mongodb 🥭"))
-
-
+    
 /* MIDDLEWARE */
 
 // route '/graphql' so that express understand we want to interact with Graphql so use graphqlHTTP 
