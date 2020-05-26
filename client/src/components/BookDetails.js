@@ -26,7 +26,7 @@ class BookDetails extends Component {
       )
     } else {
       return (
-        <div>No boos selected..</div>
+        <div>No books selected..</div>
       )
     }
   }
@@ -34,7 +34,6 @@ class BookDetails extends Component {
   render() {
     return (
       <div id="book-details">
-        <p>Output book details here</p>
         {this.displayBookDetails()}
       </div>
     )
